@@ -20,6 +20,7 @@ gulp.task('minify', 'Minify it!', ['jshint', 'clean'], function() {
         }))
             .on('error', function(err) {
                 notify(err).write(err);
+                this.emit('end');
             })
         .pipe(rename({ suffix: '.min' }))
         .pipe(gulp.dest(__dirname));
@@ -32,6 +33,7 @@ gulp.task('jshint', 'Lint it!', function() {
         .pipe(jshint.reporter('jshint-stylish'))
             .on('error', function(err) {
                 notify(err).write(err);
+                this.emit('end');
             });
 });
 
