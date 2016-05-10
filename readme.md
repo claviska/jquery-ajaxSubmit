@@ -1,6 +1,6 @@
 # jquery.ajaxSubmit.js - Effortlessly submit forms using AJAX and JSON
 
-Developed by Cory LaViska for A Beautiful Site, LLC.
+Developed by Cory LaViska for A Beautiful Site, LLC
 
 Licensed under the MIT license: http://opensource.org/licenses/MIT
 
