@@ -173,7 +173,7 @@ if(jQuery) (function($) {
             }
 
             // Show invalid fields if `res.invalid` exists
-            if( res && res.invalid.length ) {
+            if( res && res.invalid && res.invalid.length ) {
                 showInvalid.call(form, res.invalid);
             }
 
