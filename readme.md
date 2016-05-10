@@ -85,21 +85,6 @@ $('form').ajaxSubmit({
 
 - `hideInvalid`: This function will be called on all invalid inputs to effectively undo the changes made by the `showInvalid` function.
 
-Custom options example:
-
-```javascript
-$.ajaxSubmit.loader = '.my-loader-container';
-$.ajaxSubmit.message = '.my-message-container';
-
-$.ajaxSubmit.config.showInvalid = function(input) {
-    $(input).addClass('error');
-};
-
-$.ajaxSubmit.config.hideInvalid = function(input) {
-    $(input).removeClass('error');
-};
-```
-
 You may also update the default options *before instantiation*:
 
 ```javascript```
