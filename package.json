@@ -6,6 +6,17 @@
   "homepage": "https://github.com/claviska/jquery-ajaxSubmit",
   "license": "MIT",
   "dependencies": {
-    "jquery" : ">= 1.7.x"
+    "jquery": ">= 1.7.x"
+  },
+  "devDependencies": {
+    "del": "^2.2.0",
+    "gulp": "^3.9.1",
+    "gulp-help": "^1.6.1",
+    "gulp-jshint": "^2.0.1",
+    "gulp-notify": "^2.2.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-uglify": "^1.5.3",
+    "jshint": "^2.9.2",
+    "jshint-stylish": "^2.2.0"
   }
 }
