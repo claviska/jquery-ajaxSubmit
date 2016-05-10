@@ -18,6 +18,7 @@ Features:
 - Callbacks for success, fail, before, and after.
 - API to disable/enable all form inputs.
 - API to reset the form (including loader, message, and invalid fields)
+- Compact! (about 200 lines)
 
 ## Form syntax
 
