@@ -20,6 +20,14 @@ Features:
 - API to reset the form (including loader, message, and invalid fields)
 - Compact! (about 200 lines)
 
+## Installing
+
+Include the minified version of this plugin in your project or install via NPM:
+
+```
+npm install --save @claviska/jquery-ajaxSubmit
+```
+
 ## Form syntax
 
 Create a form as you normally would in HTML. The `action` and `method` attributes will be used as the target URL and method (`GET` or `POST`) for the AJAX request.
@@ -102,6 +110,26 @@ All callbacks except `before` and `error` return the server's JSON response as t
 - `error`: runs when an XHR (AJAX) error occurs.
 - `fail`: runs when your server returns an unsuccessful response.
 - `success`: runs when your server returns a successful response.
+
+### Methods
+
+Methods are called using this syntax:
+
+```javascript
+$('form').ajaxSubmit('method', arg);
+```
+
+The following API methods are supported:
+
+- `busy`: sets the form's busy state. Pass in `true` or `false`.
+
+- `create` (default): initializes the plugin.
+
+- `destroy`: returns the form to its pre-initialized state.
+
+- `disable`: disables/enables all inputs. Pass in `true` or `false`.
+
+- `reset`: resets the form to its original state, including input values, loaders, and messages.
 
 ## Responding from the server
 
