@@ -148,6 +148,9 @@ if(jQuery) (function($) {
 
         event.preventDefault();
 
+        // Don't allow submission if the form is busy
+        if( $(form).is('.ajaxSubmit-busy') ) return;
+
         // Run the before callback. Returning false here will prevent submission.
         if( options.before && options.before.call(form) === false ) return;
 
