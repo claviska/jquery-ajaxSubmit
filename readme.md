@@ -95,7 +95,7 @@ $('form').ajaxSubmit({
 
 You may also update the default options *before instantiation*:
 
-```javascript```
+```javascript
 $.ajaxSubmit.defaults.optionName = yourValue;
 ```
 
