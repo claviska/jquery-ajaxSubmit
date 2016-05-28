@@ -5,6 +5,10 @@
   "author": "Cory LaViska",
   "homepage": "https://github.com/claviska/jquery-ajaxSubmit",
   "license": "MIT",
+  "repository": {
+      "type": "git",
+      "url": "https://github.com/claviska/jquery-ajaxSubmit.git"
+  },
   "dependencies": {
     "jquery": ">= 1.8.x"
   },
