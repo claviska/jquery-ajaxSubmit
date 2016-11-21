@@ -15,10 +15,10 @@ Features:
 - Handles form serialization so you don't have to.
 - Shows/hides a loader and message if you provide them.
 - Highlights invalid fields.
-- Callbacks for success, fail, before, and after.
-- API to disable/enable all form inputs.
+- Callbacks for success, error, before, and after.
+- API to disable/enable form inputs.
 - API to reset the form (including loader, message, and invalid fields)
-- Compact! (about 200 lines)
+- Compact! (about 240 lines)
 
 ## Installing
 
@@ -30,17 +30,17 @@ npm install --save @claviska/jquery-ajaxSubmit
 
 ## Form syntax
 
-Create a form as you normally would in HTML. The `action` and `method` attributes will be used as the target URL and method (`GET` or `POST`) for the AJAX request.
+Create a form as you normally would in HTML. By default, the `action` and `method` attributes will be used as the target URL and method for the AJAX request. Alternatively, you can specify them as options (see below for details).
 
-You can add a loader container anywhere inside the form that will be shown/hidden automatically when the form is submitted:
+You can optionally add a loader container anywhere _inside_ the form that will be shown/hidden automatically when the form is submitted:
 
 ```html
 <div class="form-loader">
-    <img src="loader.gif">
+  <img src="loader.gif">
 </div>
 ```
 
-You can add a message container anywhere inside the form that will be shown/hidden and populated automatically when the form receives a message from the server:
+You can optionally add a message container anywhere _inside_ the form that will be shown/hidden and populated automatically when the form receives a message from the server:
 
 ```html
 <div class="form-message"></div>
@@ -50,48 +50,62 @@ You can add a message container anywhere inside the form that will be shown/hidd
 
 Minimal example that logs the server's response if successful:
 
-Minimal example:
+Minimal example with success callback:
 
 ```javascript
 $('form').ajaxSubmit({
-    success: function(res) {
-        console.log(res);
-    }
+  success: function(res) {
+    console.log(res);
+  }
 });
 ```
 
-Example with all possible options:
+Example with all possible options and callbacks:
 
 ```javascript
 $('form').ajaxSubmit({
-    // Options (default shown)
+    // Options (default values shown)
+    data: function() {
+      return $(this).serialize();
+    },
+    hideInvalid: function(input) {
+      $(input).closest('.form-group').removeClass('has-warning');
+    },
     loader: '.form-loader',
     message: '.form-message',
-    hideInvalid: function(input) {
-        $(input).closest('.form-group').removeClass('has-warning');
+    method: function() {
+      return $(this).attr('method');
     },
     showInvalid: function(input) {
-        $(input).closest('.form-group').addClass('has-warning');
-    }
+      $(input).closest('.form-group').addClass('has-warning');
+    },
+    url: function() {
+      return $(this).attr('action');
+    },
 
     // Callbacks
     after: function(res) { ... },
     before: function() { ... },
     error: function(res) { ... },
-    fail: function(res) { ... },
     success: function(res) { ... }
 });
 ```
 
 ### Options
 
+- `data`: The data to send to the server. This option can also be a function that returns data. By default, it uses the form's serialized data.
+
+- `hideInvalid`: A function to be called on all invalid inputs to effectively undo the changes made by the `showInvalid` function.
+
 - `loader`: A selector that points to the form's loader. This will be shown/hidden automatically using the HTML `hidden` property. Defaults to `.form-loader`.
 
 - `message`: A selector that points to the form's message container. This will be shown/hidden automatically using the HTML `hidden` property. Defaults to `.form-message`.
 
-- `showInvalid`: This function will be called on all invalid inputs as returned by res.invalid. Use it to apply error styles, etc. The default behavior is compatible with Bootstrap 4 and will highlight the closest `.form-group` using the `.has-warning` class.
+- `method`: The method to use (i.e. `GET` or `POST`). This option can also be a function that returns the method. By default, it uses the form's `method` attribute.
 
-- `hideInvalid`: This function will be called on all invalid inputs to effectively undo the changes made by the `showInvalid` function.
+- `showInvalid`: A function to be called on all invalid inputs as returned by `res.invalid`. Use it to apply error styles, etc. The default behavior is compatible with Bootstrap 4 and will highlight the closest `.form-group` using the `.has-warning` class.
+
+- `url`: The URL to send the request to. This option can also be a function that returns the URL. By default, it uses the form's `action` attribute.
 
 You may also update the default options *before instantiation*:
 
@@ -103,13 +117,12 @@ $.ajaxSubmit.defaults.optionName = yourValue;
 
 All callbacks are called in the context of the respective form (i.e. refer to the form using `this` inside your callbacks).
 
-All callbacks except `before` and `error` return the server's JSON response as their first argument.
+The `success` and `after` callbacks return the server's JSON response as their first argument.
 
-- `after`: runs after the request has completed and your server returns a response.
-- `before`: runs before the request is sent. Returning `false` will cancel submission.
-- `error`: runs when an XHR (AJAX) error occurs.
-- `fail`: runs when your server returns an unsuccessful response.
-- `success`: runs when your server returns a successful response.
+- `after(res)`: runs after the request has completed and your server returns a response.
+- `before()`: runs before the request is sent. Returning `false` will cancel submission.
+- `error(res, err)`: runs when your server returns an unsuccessful response (e.g. `400 BAD REQUEST`).
+- `success(res)`: runs when your server returns a successful response (e.g. `200 OK`).
 
 ### Methods
 
@@ -133,17 +146,14 @@ The following API methods are supported:
 
 ## Responding from the server
 
-Your server should always return a well-formed JSON response. The response can contain any data you want, but there are a few reserved properties:
+Your server should return a well-formed JSON response with an appropriate HTTP status code. The response can contain any data you want, but there are a couple reserved properties:
 
 ```javascript
 {
-    "success": false,
-    "invalid": ["username", "password"],
-    "message": "Invalid username or password"
+  "invalid": ["username", "password"],
+  "message": "Invalid username or password"
 }
 ```
-
-- `success`: Required. This property should always be `true` or `false`. *It does not indicate that the XHR request succeeded*, but rather the form was submitted and accepted by your server without validation errors.
 
 - `invalid`: Optional. An array of field names to be marked erroneous by the plugin.
 
@@ -155,9 +165,10 @@ In PHP, you can return a JSON response like this:
 
 ```php
 <?php
+http_response_code(400); // Bad Request
+header('Content-Type: application/json'); // Send as JSON
 exit(json_encode([
-    'success': true,
-    'invalid': ['username', 'password'],
-    'message': 'Invalid username or password'
+  'invalid': ['username', 'password'],
+  'message': 'Invalid username or password'
 ]));
 ```
