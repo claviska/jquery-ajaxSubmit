@@ -2,7 +2,6 @@
 
 var gulp = require('gulp-help')(require('gulp')),
     del = require('del'),
-    jshint = require('gulp-jshint'),
     notify = require('gulp-notify'),
     rename = require('gulp-rename'),
     uglify = require('gulp-uglify');
@@ -13,7 +12,7 @@ gulp.task('clean', 'Clean up!', function() {
 });
 
 // Minify
-gulp.task('minify', 'Minify it!', ['jshint', 'clean'], function() {
+gulp.task('minify', 'Minify it!', ['clean'], function() {
     return gulp.src('jquery.ajaxSubmit.js')
         .pipe(uglify({
             preserveComments: 'license'
@@ -24,17 +23,6 @@ gulp.task('minify', 'Minify it!', ['jshint', 'clean'], function() {
             })
         .pipe(rename({ suffix: '.min' }))
         .pipe(gulp.dest(__dirname));
-});
-
-// JSHint
-gulp.task('jshint', 'Lint it!', function() {
-    return gulp.src('jquery.ajaxSubmit.js')
-        .pipe(jshint('.jshintrc'))
-        .pipe(jshint.reporter('jshint-stylish'))
-            .on('error', function(err) {
-                notify(err).write(err);
-                this.emit('end');
-            });
 });
 
 // Watch for changes
