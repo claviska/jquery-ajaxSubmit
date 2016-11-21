@@ -1,13 +1,13 @@
 {
   "name": "@claviska/jquery-ajaxSubmit",
   "description": "Effortlessly submit forms using AJAX and JSON.",
-  "version": "1.0.3",
+  "version": "2.0.0",
   "author": "Cory LaViska",
   "homepage": "https://github.com/claviska/jquery-ajaxSubmit",
   "license": "MIT",
   "repository": {
-      "type": "git",
-      "url": "https://github.com/claviska/jquery-ajaxSubmit.git"
+    "type": "git",
+    "url": "https://github.com/claviska/jquery-ajaxSubmit.git"
   },
   "dependencies": {
     "jquery": ">= 1.8.x"
@@ -16,7 +16,6 @@
     "del": "^2.2.0",
     "gulp": "^3.9.1",
     "gulp-help": "^1.6.1",
-    "gulp-jshint": "^2.0.1",
     "gulp-notify": "^2.2.0",
     "gulp-rename": "^1.2.2",
     "gulp-uglify": "^1.5.3",
