@@ -73,6 +73,8 @@ $('form').ajaxSubmit({
     },
     loader: '.form-loader',
     message: '.form-message',
+    messageErrorClasses: 'message-error',
+    messageSuccessClasses: 'message-success',
     method: function() {
       return $(this).attr('method');
     },
@@ -100,6 +102,10 @@ $('form').ajaxSubmit({
 - `loader`: A selector that points to the form's loader. This will be shown/hidden automatically using the HTML `hidden` property. Defaults to `.form-loader`.
 
 - `message`: A selector that points to the form's message container. This will be shown/hidden automatically using the HTML `hidden` property. Defaults to `.form-message`.
+
+- `messageErrorClasses`: One or more space-separated classes to attach to the message container when the response is erroneous. Defaults to `message-error`.
+
+- `messageSuccessClasses`: One or more space-separated classes to attach to the message container when the response is successful. Defaults to `message-success`.
 
 - `method`: The method to use (i.e. `GET` or `POST`). This option can also be a function that returns the method. By default, it uses the form's `method` attribute.
 

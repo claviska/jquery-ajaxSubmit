@@ -19,6 +19,8 @@ if(jQuery) (function($) {
       },
       loader: '.form-loader',
       message: '.form-message',
+      messageErrorClasses: 'message-error',
+      messageSuccessClasses: 'message-success',
       method: function() {
         return $(this).attr('method');
       },
@@ -145,12 +147,14 @@ if(jQuery) (function($) {
   }
 
   // Show the form message
-  function showMessage(message) {
+  function showMessage(message, success) {
     var
       form = this,
       options = $(form).data('options.ajaxSubmit');
 
     $(form).find(options.message)
+    .toggleClass(options.messageSuccessClasses, success)
+    .toggleClass(options.messageErrorClasses, !success)
     .text(message)
     .prop('hidden', false);
   }
@@ -187,7 +191,7 @@ if(jQuery) (function($) {
 
       // Show the message if `res.message` exists
       if( res && res.message ) {
-        showMessage.call(form, res.message);
+        showMessage.call(form, res.message, true);
       }
 
       // Show invalid fields if `res.invalid` exists
@@ -209,7 +213,7 @@ if(jQuery) (function($) {
 
       // Show the message if `res.message` exists
       if( res && res.message ) {
-        showMessage.call(form, res.message);
+        showMessage.call(form, res.message, false);
       }
 
       // Show invalid fields if `res.invalid` exists
