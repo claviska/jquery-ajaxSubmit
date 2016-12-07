@@ -20,13 +20,13 @@ if(jQuery) (function($) {
       loader: '.form-loader',
       message: '.form-message',
       method: function() {
-        return $(this).attr('data-method');
+        return $(this).attr('method');
       },
       showInvalid: function(input) {
         $(input).closest('.form-group').addClass('has-warning');
       },
       url: function() {
-        return $(this).attr('data-action');
+        return $(this).attr('action');
       }
     }
   };
