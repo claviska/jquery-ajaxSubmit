@@ -153,8 +153,8 @@ if(jQuery) (function($) {
       options = $(form).data('options.ajaxSubmit');
 
     $(form).find(options.message)
-    .toggleClass(options.messageSuccessClasses, success)
-    .toggleClass(options.messageErrorClasses, !success)
+    .removeClass(success ? options.messageErrorClasses : options.messageSuccessClasses)
+    .addClass(success ? options.messageSuccessClasses : options.messageErrorClasses)
     .text(message)
     .prop('hidden', false);
   }
