@@ -1,7 +1,7 @@
 {
-  "name": "@claviska/jquery-ajaxSubmit",
+  "name": "@claviska/jquery-ajax-submit",
   "description": "Effortlessly submit forms using AJAX and JSON.",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "author": "Cory LaViska",
   "homepage": "https://github.com/claviska/jquery-ajaxSubmit",
   "license": "MIT",
