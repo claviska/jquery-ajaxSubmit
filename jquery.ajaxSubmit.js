@@ -11,25 +11,32 @@ if(jQuery) (function($) {
   // Defaults
   $.ajaxSubmit = {
     defaults: {
+      // Request options
+      url: function() {
+        return $(this).attr('action');
+      },
+      method: function() {
+        return $(this).attr('method');
+      },
+      headers: undefined,
       data: function() {
         return $(this).serialize();
       },
-      headers: undefined,
-      hideInvalid: function(input) {
-        $(input).removeClass('is-invalid');
-      },
+      after: function() {},
+      before: function() {},
+      error: function() {},
+      success: function() {},
+
+      // UI options
       loader: '.form-loader',
       message: '.form-message',
       messageErrorClasses: 'alert alert-danger',
       messageSuccessClasses: 'alert alert-success',
-      method: function() {
-        return $(this).attr('method');
+      hideInvalid: function(input) {
+        $(input).removeClass('is-invalid');
       },
       showInvalid: function(input) {
         $(input).addClass('is-invalid');
-      },
-      url: function() {
-        return $(this).attr('action');
       }
     }
   };
@@ -167,8 +174,8 @@ if(jQuery) (function($) {
     // Don't allow submission if the form is busy
     if($(form).is('.ajaxSubmit-busy')) return;
 
-    // Run the before callback. Returning false here will prevent submission.
-    if(options.before && options.before.call(form) === false) return;
+    // Run the before callback (returning false here will prevent submission)
+    if(options.before.call(form) === false) return;
 
     // Make the form busy and hide invalid fields/messages
     hideMessage.call(form);
@@ -198,10 +205,10 @@ if(jQuery) (function($) {
         }
 
         // Run the success callback
-        if(options.success) options.success.call(form, res);
+        options.success.call(form, res);
 
         // Run the after callback
-        if(options.after) options.after.call(form, res);
+        options.after.call(form, res);
       })
       .fail(function(jqXHR, textStatus, errorThrown) {
         var res = jqXHR.responseJSON;
@@ -220,10 +227,10 @@ if(jQuery) (function($) {
         }
 
         // Run the error callback
-        if(options.error) options.error.call(form, res, errorThrown);
+        options.error.call(form, res, errorThrown);
 
         // Run the after callback
-        if(options.after) options.after.call(form, res);
+        options.after.call(form, res);
       });
   }
 
