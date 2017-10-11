@@ -14,6 +14,7 @@ if(jQuery) (function($) {
       data: function() {
         return $(this).serialize();
       },
+      headers: undefined,
       hideInvalid: function(input) {
         $(input).removeClass('is-invalid');
       },
@@ -179,6 +180,7 @@ if(jQuery) (function($) {
       url: typeof options.url === 'function' ? options.url.call(form) : options.url,
       type: typeof options.method === 'function' ? options.method.call(form) : options.method,
       data: typeof options.data === 'function' ? options.data.call(form) : options.data,
+      headers: options.headers,
       dataType: 'json'
     })
       .done(function(res) {
