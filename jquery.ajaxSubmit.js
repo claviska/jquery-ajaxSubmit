@@ -15,17 +15,17 @@ if(jQuery) (function($) {
         return $(this).serialize();
       },
       hideInvalid: function(input) {
-        $(input).closest('.form-group').removeClass('has-warning');
+        $(input).removeClass('is-invalid');
       },
       loader: '.form-loader',
       message: '.form-message',
-      messageErrorClasses: 'message-error',
-      messageSuccessClasses: 'message-success',
+      messageErrorClasses: 'alert alert-danger',
+      messageSuccessClasses: 'alert alert-success',
       method: function() {
         return $(this).attr('method');
       },
       showInvalid: function(input) {
-        $(input).closest('.form-group').addClass('has-warning');
+        $(input).addClass('is-invalid');
       },
       url: function() {
         return $(this).attr('action');
@@ -36,7 +36,7 @@ if(jQuery) (function($) {
   // Create the plugin
   $.extend($.fn, {
     ajaxSubmit: function(method, options) {
-      if( typeof method === 'object' ) options = method;
+      if(typeof method === 'object') options = method;
 
       // Public API
       switch(method) {
@@ -62,52 +62,51 @@ if(jQuery) (function($) {
 
   // Make the form busy
   function busy() {
-    var
-      form = this,
-      options = $(form).data('options.ajaxSubmit');
+    var form = this;
+    var options = $(form).data('options.ajaxSubmit');
 
     $(form)
-    .addClass('ajaxSubmit-busy')
-    .find(options.loader).prop('hidden', false);
+      .addClass('ajaxSubmit-busy')
+      .find(options.loader).prop('hidden', false);
   }
 
   // Create (initialize) it
   function create(options) {
     $(this)
-    .data('options.ajaxSubmit', options)
-    .on('submit.ajaxSubmit', submit);
+      .data('options.ajaxSubmit', options)
+      .on('submit.ajaxSubmit', submit);
   }
 
   // Destroy it
   function destroy() {
     $(this)
-    .removeData('options.ajaxSubmit')
-    .off('.ajaxSubmit');
+      .removeData('options.ajaxSubmit')
+      .off('.ajaxSubmit');
   }
 
   // Disable all form elements
   function disable() {
     $(this)
-    .addClass('ajaxSubmit-disabled')
-    .find(':input').prop('disabled', true);
+      .addClass('ajaxSubmit-disabled')
+      .find(':input').prop('disabled', true);
   }
 
   // Enable all form elements
   function enable() {
     $(this)
-    .removeClass('ajaxSubmit-disabled')
-    .find(':input').prop('disabled', false);
+      .removeClass('ajaxSubmit-disabled')
+      .find(':input').prop('disabled', false);
   }
 
   // Hide invalid field errors
   function hideInvalid() {
-    var
-      form = this,
-      options = $(form).data('options.ajaxSubmit');
+    var form = this;
+    var options = $(form).data('options.ajaxSubmit');
 
     // Loop through each invalid field and run `hideInvalid`
     $(form).find('.ajaxSubmit-invalid').each(function() {
       var input = this;
+
       $(input).removeClass('ajaxSubmit-invalid');
       options.hideInvalid.call(form, input);
     });
@@ -115,13 +114,12 @@ if(jQuery) (function($) {
 
   // Hide the form message
   function hideMessage() {
-    var
-      form = this,
-      options = $(form).data('options.ajaxSubmit');
+    var form = this;
+    var options = $(form).data('options.ajaxSubmit');
 
     $(form).find(options.message)
-    .text('')
-    .prop('hidden', true);
+      .text('')
+      .prop('hidden', true);
   }
 
   // Reset the form
@@ -134,13 +132,13 @@ if(jQuery) (function($) {
 
   // Show invalid field errors
   function showInvalid(fields) {
-    var
-      form = this,
-      options = $(form).data('options.ajaxSubmit');
+    var form = this;
+    var options = $(form).data('options.ajaxSubmit');
 
     // Loop through each invalid field and run `showInvalid`
     $.each(fields, function(index, value) {
       var input = $(form).find(':input[name="' + value + '"]').get(0);
+
       $(input).addClass('ajaxSubmit-invalid');
       options.showInvalid.call(form, input);
     });
@@ -148,30 +146,28 @@ if(jQuery) (function($) {
 
   // Show the form message
   function showMessage(message, success) {
-    var
-      form = this,
-      options = $(form).data('options.ajaxSubmit');
+    var form = this;
+    var options = $(form).data('options.ajaxSubmit');
 
     $(form).find(options.message)
-    .removeClass(success ? options.messageErrorClasses : options.messageSuccessClasses)
-    .addClass(success ? options.messageSuccessClasses : options.messageErrorClasses)
-    .text(message)
-    .prop('hidden', false);
+      .removeClass(success ? options.messageErrorClasses : options.messageSuccessClasses)
+      .addClass(success ? options.messageSuccessClasses : options.messageErrorClasses)
+      .text(message)
+      .prop('hidden', false);
   }
 
   // Handle form submission
   function submit(event) {
-    var
-      form = this,
-      options = $(form).data('options.ajaxSubmit');
+    var form = this;
+    var options = $(form).data('options.ajaxSubmit');
 
     event.preventDefault();
 
     // Don't allow submission if the form is busy
-    if( $(form).is('.ajaxSubmit-busy') ) return;
+    if($(form).is('.ajaxSubmit-busy')) return;
 
     // Run the before callback. Returning false here will prevent submission.
-    if( options.before && options.before.call(form) === false ) return;
+    if(options.before && options.before.call(form) === false) return;
 
     // Make the form busy and hide invalid fields/messages
     hideMessage.call(form);
@@ -185,58 +181,57 @@ if(jQuery) (function($) {
       data: typeof options.data === 'function' ? options.data.call(form) : options.data,
       dataType: 'json'
     })
-    .done(function(res) {
-      // Remove busy state
-      unbusy.call(form);
+      .done(function(res) {
+        // Remove busy state
+        unbusy.call(form);
 
-      // Show the message if `res.message` exists
-      if( res && res.message ) {
-        showMessage.call(form, res.message, true);
-      }
+        // Show the message if `res.message` exists
+        if(res && res.message) {
+          showMessage.call(form, res.message, true);
+        }
 
-      // Show invalid fields if `res.invalid` exists
-      if( res && res.invalid && res.invalid.length ) {
-        showInvalid.call(form, res.invalid);
-      }
+        // Show invalid fields if `res.invalid` exists
+        if(res && res.invalid && res.invalid.length) {
+          showInvalid.call(form, res.invalid);
+        }
 
-      // Run the success callback
-      if( options.success ) options.success.call(form, res);
+        // Run the success callback
+        if(options.success) options.success.call(form, res);
 
-      // Run the after callback
-      if( options.after ) options.after.call(form, res);
-    })
-    .fail(function(jqXHR, textStatus, errorThrown) {
-      var res = jqXHR.responseJSON;
+        // Run the after callback
+        if(options.after) options.after.call(form, res);
+      })
+      .fail(function(jqXHR, textStatus, errorThrown) {
+        var res = jqXHR.responseJSON;
 
-      // Remove busy state
-      unbusy.call(form);
+        // Remove busy state
+        unbusy.call(form);
 
-      // Show the message if `res.message` exists
-      if( res && res.message ) {
-        showMessage.call(form, res.message, false);
-      }
+        // Show the message if `res.message` exists
+        if(res && res.message) {
+          showMessage.call(form, res.message, false);
+        }
 
-      // Show invalid fields if `res.invalid` exists
-      if( res && res.invalid && res.invalid.length ) {
-        showInvalid.call(form, res.invalid);
-      }
+        // Show invalid fields if `res.invalid` exists
+        if(res && res.invalid && res.invalid.length) {
+          showInvalid.call(form, res.invalid);
+        }
 
-      // Run the error callback
-      if( options.error ) options.error.call(form, res, errorThrown);
+        // Run the error callback
+        if(options.error) options.error.call(form, res, errorThrown);
 
-      // Run the after callback
-      if( options.after ) options.after.call(form, res);
-    });
+        // Run the after callback
+        if(options.after) options.after.call(form, res);
+      });
   }
 
   // Remove the form's busy state
   function unbusy() {
-    var
-      form = this,
-      options = $(form).data('options.ajaxSubmit');
+    var form = this;
+    var options = $(form).data('options.ajaxSubmit');
 
     $(form)
-    .removeClass('ajaxSubmit-busy')
-    .find(options.loader).prop('hidden', true);
+      .removeClass('ajaxSubmit-busy')
+      .find(options.loader).prop('hidden', true);
   }
 })(jQuery);
