@@ -68,6 +68,9 @@ $('form').ajaxSubmit({
     data: function() {
       return $(this).serialize();
     },
+    headers: {
+      'My-Custom-Header': 'Value'
+    },
     hideInvalid: function(input) {
       $(input).closest('.form-group').removeClass('has-warning');
     },
@@ -96,21 +99,14 @@ $('form').ajaxSubmit({
 ### Options
 
 - `data`: The data to send to the server. This option can also be a function that returns data. By default, it uses the form's serialized data.
-
+- `headers`: Custom headers to send along with the request.
 - `hideInvalid`: A function to be called on all invalid inputs to effectively undo the changes made by the `showInvalid` function.
-
-- `loader`: A selector that points to the form's loader. This will be shown/hidden automatically using the HTML `hidden` property. Defaults to `.form-loader`.
-
-- `message`: A selector that points to the form's message container. This will be shown/hidden automatically using the HTML `hidden` property. Defaults to `.form-message`.
-
+- `loader`: A selector that points to the form's loader. This will be shown/hidden automatically using the HTML `hidden` property. Defaults to `form-loader`.
+- `message`: A selector that points to the form's message container. This will be shown/hidden automatically using the HTML `hidden` property. Defaults to `form-message`.
 - `messageErrorClasses`: One or more space-separated classes to attach to the message container when the response is erroneous. Defaults to `message-error`.
-
 - `messageSuccessClasses`: One or more space-separated classes to attach to the message container when the response is successful. Defaults to `message-success`.
-
 - `method`: The method to use (i.e. `GET` or `POST`). This option can also be a function that returns the method. By default, it uses the form's `method` attribute.
-
-- `showInvalid`: A function to be called on all invalid inputs as returned by `res.invalid`. Use it to apply error styles, etc. The default behavior is compatible with Bootstrap 4 and will highlight the closest `.form-group` using the `.has-warning` class.
-
+- `showInvalid`: A function to be called on all invalid inputs as returned by `res.invalid`. Use it to apply error styles, etc. The default behavior is compatible with Bootstrap 4 beta and will add the `is-invalid` to the input.
 - `url`: The URL to send the request to. This option can also be a function that returns the URL. By default, it uses the form's `action` attribute.
 
 You may also update the default options *before instantiation*:
@@ -141,13 +137,9 @@ $('form').ajaxSubmit('method', arg);
 The following API methods are supported:
 
 - `busy`: sets the form's busy state. Pass in `true` or `false`.
-
 - `create` (default): initializes the plugin.
-
 - `destroy`: returns the form to its pre-initialized state.
-
 - `disable`: disables/enables all inputs. Pass in `true` or `false`.
-
 - `reset`: resets the form to its original state, including input values, loaders, and messages.
 
 ## Responding from the server
@@ -165,7 +157,16 @@ Your server should return a well-formed JSON response with an appropriate HTTP s
 
 - `message`: Optional. A string of plain text that will be injected into the message container.
 
-### Responding with PHP
+### Node.js + Express
+
+```js
+res.status(400).json({
+  invalid: ['username', 'password'],
+  message: 'Invalid username or password'
+});
+```
+
+### PHP
 
 In PHP, you can return a JSON response like this:
 
